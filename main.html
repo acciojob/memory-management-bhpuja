@@ -1,16 +1,72 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Management Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        .memory-usage {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
+    <h1>Memory Management Demo</h1>
+    <div class="controls">
+        <button id="addElementBtn">Add Element</button>
+        <button id="removeElementBtn">Remove Element</button>
+    </div>
+    <div id="elementsContainer"></div>
+    <div class="memory-usage">
+        <p>Current Heap Memory Usage: <span id="memoryUsage">0</span> MB</p>
+        <p id="memoryAlert" style="color: red;"></p>
+    </div>
 
+    <script>
+        let elementCount = 0;
+        const maxMemoryLimit = 10; // Max memory limit in MB (for demonstration purposes)
+        
+        // Function to add a new element to the DOM
+        document.getElementById('addElementBtn').addEventListener('click', function() {
+            const container = document.getElementById('elementsContainer');
+            const newElement = document.createElement('div');
+            newElement.classList.add('element');
+            newElement.textContent = 'Element ' + (++elementCount);
+            container.appendChild(newElement);
+            updateMemoryUsage();
+        });
+
+        // Function to remove the last element from the DOM
+        document.getElementById('removeElementBtn').addEventListener('click', function() {
+            const container = document.getElementById('elementsContainer');
+            if (container.children.length > 0) {
+                container.removeChild(container.lastChild);
+                elementCount--;
+                updateMemoryUsage();
+            }
+        });
+
+        // Function to update and display memory usage
+        function updateMemoryUsage() {
+            const memoryUsage = performance.memory.usedJSHeapSize / (1024 * 1024); // Convert bytes to MB
+            document.getElementById('memoryUsage').textContent = memoryUsage.toFixed(2);
+            
+            if (memoryUsage > maxMemoryLimit) {
+                document.getElementById('memoryAlert').textContent = 'Memory usage is high! Consider removing some elements or optimizing the app.';
+            } else {
+                document.getElementById('memoryAlert').textContent = '';
+            }
+        }
+
+        // Initial memory check
+        updateMemoryUsage();
+    </script>
 </body>
-
 </html>
